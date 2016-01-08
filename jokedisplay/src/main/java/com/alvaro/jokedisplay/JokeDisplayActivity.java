@@ -1,9 +1,9 @@
 package com.alvaro.jokedisplay;
 
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,9 +26,9 @@ public class JokeDisplayActivity extends AppCompatActivity {
             JokeDisplayFragment jokeDisplayFragment =
                     JokeDisplayFragment.newInstance(jokeString);
 
-            FragmentManager fm = getSupportFragmentManager();
+            FragmentManager fm = getFragmentManager();
             fm.beginTransaction()
-              .add(R.id.container,jokeDisplayFragment, FRAG_TAG)
+              .add(R.id.container, jokeDisplayFragment, FRAG_TAG)
               .addToBackStack(null)
               .commit();
 

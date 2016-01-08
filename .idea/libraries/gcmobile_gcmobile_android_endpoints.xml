@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gcmobile.gcmobile-android-endpoints">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gcmobile/build/libs/gcmobile-android-endpoints.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
