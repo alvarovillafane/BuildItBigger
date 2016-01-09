@@ -1,7 +1,6 @@
 package com.udacity.gradle.builditbigger.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Pair;
@@ -10,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.alvaro.jokedisplay.JokeDisplayActivity;
-import com.alvarovm.provider.JokeProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.udacity.gradle.builditbigger.R;
@@ -34,8 +31,6 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
         Button btnTellJoke = (Button) root.findViewById(R.id.tell_joke_btn);
         btnTellJoke.setOnClickListener(this);
-
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(getActivity(), "Manfred"));
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
@@ -60,12 +55,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     }
 
     public void tellJoke(View view){
-        JokeProvider jokeProvider = new JokeProvider();
-        Intent displayIntent = new Intent(getActivity(),JokeDisplayActivity.class);
-        displayIntent.putExtra(Intent.EXTRA_TEXT, jokeProvider.getJoke());
-        startActivity(displayIntent);
-
-
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(getActivity(), ""));
     }
 
 }

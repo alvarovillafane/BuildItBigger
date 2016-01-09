@@ -6,6 +6,7 @@
 
 package com.alvaro.joke.gcmobile;
 
+import com.alvarovm.provider.JokeProvider;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -32,5 +33,15 @@ public class MyEndpoint {
 
         return response;
     }
+
+    @ApiMethod(name = "retrieveJoke")
+    public MyBean retrieveJoke(){
+        MyBean response = new MyBean();
+        JokeProvider jProvider = new JokeProvider();
+        response.setData("Joke: " + jProvider.getJoke());
+        return response;
+    }
+
+
 
 }
