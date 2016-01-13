@@ -1,12 +1,12 @@
 package com.alvarovm.provider;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class JokeProvider {
     private ArrayList<String> jokeList;
     private int min = 0;
-    private int max = 6;
+    private int max = 5;
 
     public JokeProvider(){
         jokeList = new ArrayList<String>(max);
@@ -19,9 +19,9 @@ public class JokeProvider {
 
     }
 
-
     public String getJoke(){
-        return jokeList.get(ThreadLocalRandom.current().nextInt(min, max + 1));
+        Random rand = new Random();
+        return jokeList.get(rand.nextInt((max - min) + 1) + min);
     }
 
 }

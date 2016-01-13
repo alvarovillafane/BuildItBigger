@@ -4,6 +4,7 @@ package com.udacity.gradle.builditbigger.tasks;
 import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.UiThreadTest;
+import android.util.Log;
 
 import junit.framework.Assert;
 
@@ -39,6 +40,7 @@ public class EndpointTaskTest extends AndroidTestCase implements EndpointsAsyncT
 
     @UiThreadTest
     public void testAsyncTask() throws Throwable {
+        Log.i(TAG, "test AsyncTask executed");
         endpointsAsyncTask.execute();
         signal.await(30, TimeUnit.SECONDS);
     }
