@@ -28,4 +28,12 @@
         android:layout_below="@+id/tell_joke_btn"
         android:id="@+id/joke_display"/>
 
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tell_joke_btn"/>
+
 </RelativeLayout>

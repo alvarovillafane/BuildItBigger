@@ -7,10 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.alvaro.jokedisplay.JokeDisplayActivity;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.tasks.EndpointsAsyncTask;
 
@@ -23,14 +27,34 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public MainActivityFragment() {
     }
 
+    PublisherInterstitialAd mPublisherInterstitialAd;
+    String joke;
+    private ProgressBar spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
+        spinner = (ProgressBar) root.findViewById(R.id.spinner);
+        spinner.setVisibility(View.GONE);
+
         Button btnTellJoke = (Button) root.findViewById(R.id.tell_joke_btn);
         btnTellJoke.setOnClickListener(this);
+
+
+        mPublisherInterstitialAd = new PublisherInterstitialAd(getActivity());
+        mPublisherInterstitialAd.setAdUnitId(getString(R.string.intertistial_ad_unit_id));
+
+        mPublisherInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                displayJokeIntent(joke);
+            }
+        });
+
+        requestNewInterstitial();
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
@@ -49,6 +73,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.tell_joke_btn:
                 tellJoke(v);
+                spinner.setVisibility(View.VISIBLE);
                 break;
 
         }
@@ -58,10 +83,38 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         new EndpointsAsyncTask(this).execute();
     }
 
-    @Override
-    public void onTaskCompleted(String joke) {
+    private void displayJokeIntent(String joke){
         Intent displayIntent = new Intent(getActivity(),JokeDisplayActivity.class);
         displayIntent.putExtra(Intent.EXTRA_TEXT, joke);
         startActivity(displayIntent);
+
+    }
+
+    private void displayJokeIntent(String joke, String a){
+        Intent displayIntent = new Intent(getActivity(),JokeDisplayActivity.class);
+        displayIntent.putExtra(Intent.EXTRA_TEXT, joke);
+        startActivity(displayIntent);
+
+    }
+
+    @Override
+    public void onTaskCompleted(String joke) {
+        this.joke = joke;
+
+        if (mPublisherInterstitialAd.isLoaded()) {
+            mPublisherInterstitialAd.show();
+        } else {
+            displayJokeIntent(joke);
+        }
+
+        spinner.setVisibility(View.GONE);
+    }
+
+    private void requestNewInterstitial() {
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mPublisherInterstitialAd.loadAd(adRequest);
     }
 }

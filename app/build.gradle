@@ -43,7 +43,34 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':gcmobile', configuration: 'android-endpoints')
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.google.android.gms:play-services:8.4.0'
+    freeCompile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:support-v4:23.1.1'
 }
+
+task startAppEngine (dependsOn : ':gcmobile:appengineRun') {
+    project(":gcmobile").afterEvaluate { gcmobile ->
+        gcmobile.extensions.appengine.daemon = true
+    }
+    doLast {
+        println "started the server!"
+    }
+}
+
+task connectedTests(dependsOn: ':app:connectedAndroidTest') {
+    dependsOn = [':app:connectedAndroidTest', 'startAppEngine']
+    finalizedBy 'stopAppEngine'
+    doLast {
+        println "connectedTests finished!"
+    }
+
+}
+
+task stopAppEngine {
+    dependsOn ':gcmobile:appengineStop'
+    doLast {
+        println "stop the server!"
+    }
+}
+
+connectedTests.mustRunAfter startAppEngine

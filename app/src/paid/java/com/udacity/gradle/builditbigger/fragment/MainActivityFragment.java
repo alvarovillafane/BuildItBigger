@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.alvaro.jokedisplay.JokeDisplayActivity;
 import com.udacity.gradle.builditbigger.R;
@@ -21,11 +22,14 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public MainActivityFragment() {
     }
 
+    private ProgressBar spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+        spinner = (ProgressBar) root.findViewById(R.id.spinner);
+        spinner.setVisibility(View.GONE);
 
         Button btnTellJoke = (Button) root.findViewById(R.id.tell_joke_btn);
         btnTellJoke.setOnClickListener(this);
@@ -38,6 +42,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tell_joke_btn:
+                spinner.setVisibility(View.VISIBLE);
                 tellJoke(v);
                 break;
 
@@ -50,6 +55,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onTaskCompleted(String joke) {
+        spinner.setVisibility(View.GONE);
         Intent displayIntent = new Intent(getActivity(),JokeDisplayActivity.class);
         displayIntent.putExtra(Intent.EXTRA_TEXT, joke);
         startActivity(displayIntent);
